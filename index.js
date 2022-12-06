@@ -5,7 +5,7 @@ import conectarDB from "./config/db.js";
 import usuarioRoutes from "./routes/usuarioRoutes.js";
 import proyectosRoutes from "./routes/proyectoRoutes.js";
 import tareaRoutes from "./routes/tareaRoutes.js";
-
+import {Server} from "socket.io"
 
 const app= express();
 app.use(express.json())
@@ -41,6 +41,18 @@ app.use("/api/proyectos", proyectosRoutes);
 app.use("/api/tareas", tareaRoutes);
 
 const port = process.env.PORT || 4000;
-app.listen(port, () => {
-    console.log(`servidor corriendo en el puerto ${port}`);
+const servidor = app.listen(port, () => {
+    //console.log(`servidor corriendo en el puerto ${port}`);
 });
+
+//Socket.io
+const io = new Server(servidor, {
+    pingTimeout: 60000,
+    cors:{
+        origin: process.env.FRONTEND_URL,
+    },
+});
+
+io.on("connection", (socket)=>{
+    //Definicion de eventos de socket io
+})
